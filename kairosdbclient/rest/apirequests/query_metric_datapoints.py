@@ -7,33 +7,17 @@ class QueryMetricDataPointsRequest(Request):
     resource = MetricDataPoints
     success_status_code = 200
 
-    def __init__(self, start, end, metrics):
+    def __init__(self, start, end, metrics, time_zone=None, cache_time=0):
         super(QueryMetricDataPointsRequest, self).__init__()
 
         self.start = start
         self.end = end
+        self.time_zone = time_zone
+        self.cache_time = cache_time
         self.metrics = metrics
 
     def payload(self):
-        payload = dict(self.format_time('start', self.start).items() + self.format_time('end', self.end).items())
-        payload['metrics'] = [self.format_metric(metric) for metric in self.metrics]
+        payload = dict(self._format_time('start', self.start).items() + self._format_time('end', self.end).items())
+        payload['metrics'] = map(lambda m: m.format(), self.metrics)
         return payload
 
-    def format_metric(self, metric):
-        request = {
-            'name': metric.name,
-        }
-
-        if metric.tags:
-            request['tags'] = metric.tags
-
-        if metric.limit:
-            request['limit'] = metric.limit
-
-        if metric.group_bys:
-            request['group_by'] = metric.group_bys
-
-        if metric.aggregators:
-            request['aggregators'] = metric.aggregators
-
-        return request

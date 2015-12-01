@@ -2,7 +2,7 @@ import requests
 from kairosdbclient.exceptions import ResponseException
 
 from kairosdbclient.rest.apirequests import *
-from kairosdbclient.rest.query import SingleMetric
+from kairosdbclient.rest.metric import SingleMetric
 
 
 class KairosDBRestClient(object):
@@ -10,11 +10,11 @@ class KairosDBRestClient(object):
         self.host = host
         self.port = port
 
-    def get_url(self, uri):
+    def _get_url(self, uri):
         return "%s:%s/api/v1/%s" % (self.host, self.port, uri)
 
     def _make_request(self, method, request):
-        response = requests.request(method, self.get_url(request.uri), json=request.payload())
+        response = requests.request(method, self._get_url(request.uri), json=request.payload())
         return self._parse_response(request, response)
 
     def _parse_response(self, request, response):
@@ -47,8 +47,8 @@ class KairosDBRestClient(object):
     def health_status(self):
         return self._make_request('GET', HealthStatusRequest())
 
-    def query(self, start, end, metrics):
-        return self._make_request('POST', QueryMetricDataPointsRequest(start, end, metrics))
+    def query(self, start, end, metrics, time_zone=None, cache_time=0):
+        return self._make_request('POST', QueryMetricDataPointsRequest(start, end, metrics, time_zone, cache_time))
 
     def __getitem__(self, item):
         time, metrics = item

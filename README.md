@@ -1,6 +1,15 @@
 # kairosdb-python-client
 
-Python client for KairosDB. Very alpha stage!
+Python client for KairosDB. Very alpha stage! [![Build Status](https://travis-ci.org/FrEaKmAn/kairosdb-python-client.svg)](https://travis-ci.org/FrEaKmAn/kairosdb-python-client)
+
+## Installation
+
+TODO
+
+
+## Getting Started
+
+TODO
 
 ## Examples
 

@@ -1,0 +1,10 @@
+{
+    "results": [
+        {
+            "name": "sensor.10",
+            "tags": {
+                "host": ["amazon", "azure"]
+            }
+        }
+    ]
+}
