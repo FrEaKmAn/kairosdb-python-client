@@ -3,6 +3,7 @@ from kairosdbclient.exceptions import ResponseException
 
 from kairosdbclient.rest.apirequests import *
 from kairosdbclient.rest.metric import SingleMetric
+from kairosdbclient.rest.aggregators import avg
 
 
 class KairosDBRestClient(object):
@@ -52,4 +53,9 @@ class KairosDBRestClient(object):
 
     def __getitem__(self, item):
         time, metrics = item
-        return SingleMetric(self.query, time.start, time.stop, metrics)
+
+        single_metric = SingleMetric(self.query, time.start, time.stop, metrics)
+        if time.step:
+            single_metric.aggregate(time.step)
+
+        return single_metric

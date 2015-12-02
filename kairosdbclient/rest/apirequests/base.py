@@ -5,13 +5,13 @@ from kairosdbclient.exceptions import RequestException
 class Request(object):
     def __init__(self):
         if not hasattr(self, 'uri'):
-            raise RequestException("Request %s needs to have uri attribute" % self.__class__.__name__)
+            raise RequestException("Request %s needs to have uri attribute." % self.__class__.__name__)
 
         if not hasattr(self, 'resource'):
-            raise RequestException("Request %s needs to have resource attribute" % self.__class__.__name__)
+            raise RequestException("Request %s needs to have resource attribute." % self.__class__.__name__)
 
         if not hasattr(self, 'success_status_code'):
-            raise RequestException("Request %s needs to have success_status_code attribute" % self.__class__.__name__)
+            raise RequestException("Request %s needs to have success_status_code attribute." % self.__class__.__name__)
 
     @abstractmethod
     def payload(self):
@@ -32,7 +32,7 @@ class Request(object):
                 'unit': unit
             }}
 
-        return RequestException("Invalid time format %s" % time)
+        raise RequestException("Invalid time format %s." % time)
 
     def __eq__(self, other):
         return isinstance(other, self.__class__) and \

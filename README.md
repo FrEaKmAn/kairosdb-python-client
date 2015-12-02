@@ -19,13 +19,13 @@ To query datapoints, we create a query
 
 ```python
 client = KairosDBRestClient()
-client.query(1448019560000, 1448019565000, metrics=[
-    Metric('my.test.metric').tag(host=['amazon', 'azure']).group_by(tags=['host']).aggregate(sum=(1, 'hours'))
+client.query(1448019060000, 1448019560000, metrics=[
+    Metric('my.test.metric').tag(host=['amazon', 'azure']).group_by(tags=['host']).aggregate(avg=(1, 'hours'))
 ])
 ```
 
 or shorter
 
 ```python
-client[1448019560000:1448019565000, 'my.test.metric'].tag(host=['amazon', 'azure']).group_by(tags=['host']).aggregate(sum=(1, 'hours')).query()
+client[1448019060000:1448019560000:avg(1,'hours'), 'my.test.metric'].tag(host=['amazon', 'azure']).group_by(tags=['host']).query()
 ```

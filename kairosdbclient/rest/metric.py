@@ -194,5 +194,5 @@ class SingleMetric(object):
 
         return self
 
-    def query(self):
-        return self.callback(self.start, self.end, self.metrics)
+    def query(self, time_zone=None, cache_time=0):
+        return self.callback(self.start, self.end, self.metrics, time_zone=time_zone, cache_time=cache_time)

@@ -1,5 +1,6 @@
 import unittest
 from kairosdbclient.exceptions import ResponseException
+from kairosdbclient.rest.aggregators import avg, AvgAggregator
 from kairosdbclient.rest.apirequests import *
 
 from kairosdbclient import KairosDBRestClient
@@ -33,6 +34,15 @@ class RestClientTest(unittest.TestCase):
         self.assertEqual(len(single_metric.metrics), 2)
         self.assertEqual(single_metric.metrics[0].name, 'metric.name')
         self.assertEqual(single_metric.metrics[1].name, 'metric.name2')
+
+    def test_get_item_with_aggregator(self):
+        single_metric = self.client[1:2:avg(10, 'minutes'), 'metric.name']
+
+        self.assertEqual(single_metric.start, 1)
+        self.assertEqual(single_metric.end, 2)
+        self.assertEqual(len(single_metric.metrics), 1)
+        self.assertEqual(len(single_metric.metrics[0].aggregators), 1)
+        self.assertEqual(single_metric.metrics[0].aggregators[0], AvgAggregator(10, 'minutes'))
 
     def test_parse_response_success_status_code(self):
         response = MockResponse(status_code=204)
