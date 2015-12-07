@@ -7,3 +7,5 @@ from .version import VersionRequest
 from .query_metric_names import QueryMetricNamesRequest
 from .query_tag_names import QueryTagNamesRequest
 from .query_tag_values import QueryTagValuesRequest
+from .save_metric_datapoints import SaveMetricDataPointsRequest
+from .delete_metric_datapoints import DeleteMetricDataPointsRequest

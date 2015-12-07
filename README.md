@@ -27,5 +27,5 @@ client.query(1448019060000, 1448019560000, metrics=[
 or shorter
 
 ```python
-client[1448019060000:1448019560000:avg(1,'hours'), 'my.test.metric'].tag(host=['amazon', 'azure']).group_by(tags=['host']).query()
+client[1448019060000:1448019560000:AvgAggregator(1,'hours'), 'my.test.metric'].tag(host=['amazon', 'azure']).group_by(tags=['host']).query()
 ```

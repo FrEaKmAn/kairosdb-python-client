@@ -427,10 +427,6 @@ class MinAggregator(RangeAggregator):
     name = 'min'
 
 
-def avg(value, unit):
-    return AvgAggregator(value, unit)
-
-
 aggregators = {
     AvgAggregator.name: AvgAggregator,
     StdAggregator.name: StdAggregator,

@@ -12,6 +12,7 @@ class MockRequest(Request):
     uri = 'uri'
     resource = MockResource
     success_status_code = 200
+    request_method = 'GET'
 
     def payload(self):
         return None

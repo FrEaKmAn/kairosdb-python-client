@@ -7,6 +7,7 @@ class QueryMetricTagsRequest(Request):
     uri = 'datapoints/query/tags'
     resource = MetricTags
     success_status_code = 200
+    request_method = 'POST'
 
     def __init__(self, start, end, metrics):
         super(QueryMetricTagsRequest, self).__init__()
@@ -16,16 +17,17 @@ class QueryMetricTagsRequest(Request):
         self._parse_metrics(metrics)
 
     def payload(self):
-        start = self._format_time('start', self._start)
-        end = self._format_time('end', self._end)
-        metrics = map(lambda m: m.format(), self._metrics)
-
         request = {
-            'metrics': metrics
+            'metrics': map(lambda m: m.format(), self._metrics)
         }
 
+        start = self._format_time('start', self._start)
         request.update(start)
-        request.update(end)
+
+        if self._end:
+            end = self._format_time('end', self._end)
+            request.update(end)
+
         return request
 
     def _parse_metrics(self, metrics):
@@ -38,11 +40,8 @@ class QueryMetricTagsRequest(Request):
                 if 'name' not in metric:
                     raise RequestException("Missing name in metric: %s." % metric)
 
-                if 'tags' not in metric:
-                    raise RequestException("Missing tags in metric: %s." % metric)
-
                 name = metric['name']
-                tags = metric['tags']
+                tags = metric.pop('tags', {})
 
                 self._metrics.append(MetricTag(name, **tags))
             else:
@@ -61,7 +60,11 @@ class MetricTag(object):
             self.tags[name] = tags
 
     def format(self):
-        return {
+        request = {
             'name': self.name,
-            'tags': self.tags
         }
+
+        if self.tags:
+            request['tags'] = self.tags
+
+        return request

@@ -36,6 +36,15 @@ class MetricTagsRequestTest(unittest.TestCase):
         with self.assertRaises(RequestException):
             QueryMetricTagsRequest(100, 200, metrics=[{'tags': {'host': ['azure']}}])
 
+    def test_metric_tag_without_tags(self):
+        request = QueryMetricTagsRequest(100, 200, metrics=[{'name': 'metric.1'}])
+
+        self.assertEqual(request.payload(), {'start_absolute': 100,
+                                             'end_absolute': 200,
+                                             'metrics': [
+                                                 {'name': 'metric.1'}
+                                             ]})
+
 
 class MetricTagTest(unittest.TestCase):
     def test_metric_tag(self):
@@ -49,3 +58,9 @@ class MetricTagTest(unittest.TestCase):
 
         self.assertEqual(metric_tag.name, 'metric.1')
         self.assertEqual(metric_tag.tags, {'host': ['azure']})
+
+    def test_metric_tag_without_tags(self):
+        metric_tag = MetricTag('metric.1')
+
+        self.assertEqual(metric_tag.name, 'metric.1')
+        self.assertEqual(metric_tag.tags, {})

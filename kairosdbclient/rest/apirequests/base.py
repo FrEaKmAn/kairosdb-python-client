@@ -13,6 +13,9 @@ class Request(object):
         if not hasattr(self, 'success_status_code'):
             raise RequestException("Request %s needs to have success_status_code attribute." % self.__class__.__name__)
 
+        if not hasattr(self, 'request_method'):
+            raise RequestException("Request %s needs to have request_method attribute." % self.__class__.__name__)
+
     @abstractmethod
     def payload(self):
         pass
@@ -39,6 +42,7 @@ class Request(object):
                getattr(self, 'uri') == getattr(other, 'uri') and \
                getattr(self, 'resource') == getattr(other, 'resource') and \
                getattr(self, 'success_status_code') == getattr(other, 'success_status_code') and \
+               getattr(self, 'request_method') == getattr(other, 'request_method') and \
                self.payload() == other.payload()
 
     def __ne__(self, other):

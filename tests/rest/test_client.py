@@ -1,6 +1,6 @@
 import unittest
 from kairosdbclient.exceptions import ResponseException
-from kairosdbclient.rest.aggregators import avg, AvgAggregator
+from kairosdbclient.rest.aggregators import AvgAggregator
 from kairosdbclient.rest.apirequests import *
 
 from kairosdbclient import KairosDBRestClient
@@ -36,7 +36,7 @@ class RestClientTest(unittest.TestCase):
         self.assertEqual(single_metric.metrics[1].name, 'metric.name2')
 
     def test_get_item_with_aggregator(self):
-        single_metric = self.client[1:2:avg(10, 'minutes'), 'metric.name']
+        single_metric = self.client[1:2:AvgAggregator(10, 'minutes'), 'metric.name']
 
         self.assertEqual(single_metric.start, 1)
         self.assertEqual(single_metric.end, 2)
@@ -65,60 +65,60 @@ class RestClientTest(unittest.TestCase):
             client = KairosDBRestClient()
             client.version()
 
-        mock_method.assert_called_once_with('GET', VersionRequest())
+        mock_method.assert_called_once_with(VersionRequest())
 
     def test_metric_tags(self):
         with patch.object(KairosDBRestClient, '_make_request') as mock_method:
             client = KairosDBRestClient()
             client.metric_tags(100, 200, [MetricTag('metric.1', host=['azure'])])
 
-        mock_method.assert_called_once_with('POST', QueryMetricTagsRequest(100, 200, [MetricTag('metric.1', host=['azure'])]))
+        mock_method.assert_called_once_with(QueryMetricTagsRequest(100, 200, [MetricTag('metric.1', host=['azure'])]))
 
     def test_metric_names(self):
         with patch.object(KairosDBRestClient, '_make_request') as mock_method:
             client = KairosDBRestClient()
             client.metric_names()
 
-        mock_method.assert_called_once_with('GET', QueryMetricNamesRequest())
+        mock_method.assert_called_once_with(QueryMetricNamesRequest())
 
     def test_tag_names(self):
         with patch.object(KairosDBRestClient, '_make_request') as mock_method:
             client = KairosDBRestClient()
             client.tag_names()
 
-        mock_method.assert_called_once_with('GET', QueryTagNamesRequest())
+        mock_method.assert_called_once_with(QueryTagNamesRequest())
 
     def test_tag_values(self):
         with patch.object(KairosDBRestClient, '_make_request') as mock_method:
             client = KairosDBRestClient()
             client.tag_values()
 
-        mock_method.assert_called_once_with('GET', QueryTagValuesRequest())
+        mock_method.assert_called_once_with(QueryTagValuesRequest())
 
     def test_delete_metric(self):
         with patch.object(KairosDBRestClient, '_make_request') as mock_method:
             client = KairosDBRestClient()
             client.delete_metric('metric.name')
 
-        mock_method.assert_called_once_with('DELETE', DeleteMetricRequest('metric.name'))
+        mock_method.assert_called_once_with(DeleteMetricRequest('metric.name'))
 
     def test_health_check(self):
         with patch.object(KairosDBRestClient, '_make_request') as mock_method:
             client = KairosDBRestClient()
             client.health_check()
 
-        mock_method.assert_called_once_with('GET', HealthCheckRequest())
+        mock_method.assert_called_once_with(HealthCheckRequest())
 
     def test_health_status(self):
         with patch.object(KairosDBRestClient, '_make_request') as mock_method:
             client = KairosDBRestClient()
             client.health_status()
 
-        mock_method.assert_called_once_with('GET', HealthStatusRequest())
+        mock_method.assert_called_once_with(HealthStatusRequest())
 
     def test_query(self):
         with patch.object(KairosDBRestClient, '_make_request') as mock_method:
             client = KairosDBRestClient()
             client.query(100, 200, metrics=[Metric('metric.name')])
 
-        mock_method.assert_called_once_with('POST', QueryMetricDataPointsRequest(100, 200, [Metric('metric.name')], None, 0))
+        mock_method.assert_called_once_with(QueryMetricDataPointsRequest(100, 200, [Metric('metric.name')], None, 0))
