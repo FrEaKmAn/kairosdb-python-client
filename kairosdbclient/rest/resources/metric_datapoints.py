@@ -47,11 +47,15 @@ class ResultMetric(object):
             for result in self.results:
                 identifier = get_column_key(result['tags'])
 
-                times, values = zip(*result['values'])
-                ts = Series(values, index=to_datetime(times, unit='ms'), name=identifier)
-                ts.index = ts.index.tz_localize('UTC').tz_convert(time_zone)
+                if result['values']:
+                    times, values = zip(*result['values'])
+                    ts = Series(values, index=to_datetime(times, unit='ms'), name=identifier)
+                    ts.index = ts.index.tz_localize('UTC').tz_convert(time_zone)
 
-                series.append(ts)
+                    series.append(ts)
+
+            if not series:
+                return None
 
             return concat(series, axis=1)
         except ImportError:
