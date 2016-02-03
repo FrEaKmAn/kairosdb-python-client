@@ -3,7 +3,8 @@ from kairosdbclient.rest.resources.base import Resource
 
 
 class MetricDataPoints(Resource):
-    def __init__(self, response):
+    def __init__(self, request, response):
+        super(MetricDataPoints, self).__init__(request)
         self.queries = map(ResultMetric, response.json()['queries'])
 
     def __iter__(self):
@@ -15,6 +16,13 @@ class MetricDataPoints(Resource):
 
     def __len__(self):
         return len(self.queries)
+
+    def as_data_frame(self, time_zone, columns=None):
+        df = self.queries[0].as_data_frame(time_zone, columns)
+        for query in self.queries[1:]:
+            df.update(query.as_data_frame(time_zone, columns))
+
+        return df
 
 
 class ResultMetric(object):

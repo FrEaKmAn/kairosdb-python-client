@@ -5,7 +5,8 @@ from tests.tools import get_resource_as_json, MockResponse
 
 class MetricTagsResourceTest(unittest.TestCase):
     def test_parsing_response(self):
+        request = None
         json = get_resource_as_json('metric_tags.json')
-        resource = MetricTags(MockResponse(json_content=json))
+        resource = MetricTags(request, MockResponse(json_content=json))
 
         self.assertEqual(len(resource.results), 1)

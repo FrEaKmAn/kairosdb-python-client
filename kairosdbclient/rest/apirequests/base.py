@@ -1,5 +1,7 @@
 from abc import abstractmethod
 from kairosdbclient.exceptions import RequestException
+from datetime import datetime
+import calendar
 
 
 class Request(object):
@@ -22,11 +24,15 @@ class Request(object):
 
     def to_resource(self, response):
         resource = getattr(self, 'resource')
-        return resource(response) if resource and response.status_code is not 204 else None
+        return resource(self, response) if resource and response.status_code is not 204 else None
 
     def _format_time(self, prefix, time):
         if isinstance(time, int):
             return {prefix + '_absolute': time}
+
+        if isinstance(time, datetime):
+            timestamp = calendar.timegm(time.utctimetuple()) * 1000
+            return {prefix + '_absolute': timestamp}
 
         if isinstance(time, (list, tuple)):
             value, unit = time

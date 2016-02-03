@@ -1,6 +1,6 @@
 from kairosdbclient.rest.apirequests.save_metric_datapoints import MetricDataPoints
 import requests
-from kairosdbclient.exceptions import ResponseException
+from kairosdbclient.exceptions import ResponseException, ClientException
 
 from kairosdbclient.rest.apirequests import *
 from kairosdbclient.rest.metric import SingleMetric

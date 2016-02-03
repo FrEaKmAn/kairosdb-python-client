@@ -2,7 +2,8 @@ from kairosdbclient.rest.resources.base import Resource
 
 
 class HealthStatus(Resource):
-    def __init__(self, response):
+    def __init__(self, request, response):
+        super(HealthStatus, self).__init__(request)
         self.messages = dict(map(lambda i: str(i).split(': '), response.json()))
 
     @property

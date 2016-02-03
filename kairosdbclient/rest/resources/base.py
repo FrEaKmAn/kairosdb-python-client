@@ -1,2 +1,3 @@
 class Resource(object):
-    pass
+    def __init__(self, request):
+        self.request = request
